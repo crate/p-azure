@@ -1,0 +1,95 @@
+#cloud-config
+coreos:
+  update:
+    reboot-strategy: off
+  etcd2:
+    discovery: https://discovery.etcd.io/eee4b8ef3ee706fdbcf49bcc45eae891
+
+    advertise-client-urls: http://$private_ipv4:2379,http://$private_ipv4:4001
+    initial-advertise-peer-urls: http://$private_ipv4:2380
+    listen-client-urls: http://0.0.0.0:2379,http://0.0.0.0:4001
+    listen-peer-urls: http://$private_ipv4:2380
+  units:
+    - name: etcd2.service
+      command: start
+    - name: fleet.service
+      command: start
+    - name: docker-tcp.socket
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Docker Socket for the API
+
+        [Socket]
+        ListenStream=2375
+        BindIPv6Only=both
+        Service=docker.service
+
+        [Install]
+        WantedBy=sockets.target
+    - name: docker.service
+      drop-ins:
+        - name: 30-custom.conf
+          content: |
+            [Service]
+            Environment="DOCKER_OPTS=--cluster-advertise eth0:2375 --cluster-store etcd://$private_ipv4:2379"
+    - name: update-engine.service
+      command: restart
+
+    - name: docker-compose.service
+      command: start
+      content: |
+        [Unit]
+        Description=Install docker-compose 1.6.2
+        After=network.target
+
+        [Service]
+        ExecStartPre=-/usr/bin/mkdir -p /opt/bin
+        ExecStartPre=/usr/bin/curl -Lo /opt/bin/docker-compose -z /opt/bin/docker-compose https://github.com/docker/compose/releases/download/1.6.2/docker-compose-Linux-x86_64
+        ExecStart=/usr/bin/chmod +x /opt/bin/docker-compose
+
+        RemainAfterExit=yes
+        Type=oneshot
+    - name: swarm-agent.service
+      command: start
+      content: |
+        [Unit]
+        Description=Docker Swarm Agent Container
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        ExecStart=/usr/bin/docker run -d swarm join --addr=$private_ipv4:2375 etcd://$private_ipv4:2379/swarm
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: pull-crate.service
+      command: start
+      content: |
+        [Unit]
+        Description=Pull the latest Crate Docker Image
+        After=swarm-agent.service
+
+        [Service]
+        ExecStart=/usr/bin/docker pull crate:latest
+        Type=oneshot
+    - name: ruxit-agent.service
+      command: start
+      content: |
+        [Unit]
+        Description=Ruxit Agent
+
+        [Service]
+        ExecStartPre=-/usr/bin/mkdir -p /opt/bin
+        ExecStartPre=/usr/bin/wget -O /opt/bin/ruxit-Agent-Linux-1.87.198.sh https://akp88036.live.ruxit.com/installer/agent/unix/latest/3xEDwbMRpYzbTI5H
+        ExecStartPre=/usr/bin/chmod +x /opt/bin/ruxit-Agent-Linux-1.87.198.sh
+        ExecStart=/usr/bin/bash /opt/bin/ruxit-Agent-Linux-1.87.198.sh
+
+        [Install]
+        WantedBy=multi-user.target
+users:
+  - name: swarm
+    groups:
+      - sudo
+      - docker
