@@ -53,10 +53,10 @@ trait WETParser extends Iterator[Page] {
         linesIterator.next()
 
         val content = getUntil(_ == blockDelimiter)
-        val splitUri= uri.split('/')
-        val domain = splitUri(2)
+        val splitUri= uri.split('/').drop(2)
+        val domain = splitUri(0)
         val reverseDomain = domain.split('.').reverse.mkString(".")
-        val newUri = splitUri.updated(2, reverseDomain).mkString("/")
+        val newUri = splitUri.updated(0, reverseDomain).mkString("/")
 
         return Option(new Page(newUri, reverseDomain, zonedDate, contentType, contentLength, content))
       }
