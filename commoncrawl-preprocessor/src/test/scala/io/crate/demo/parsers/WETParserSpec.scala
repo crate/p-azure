@@ -55,8 +55,7 @@ class WETParserSpec extends FlatSpec with Matchers {
     parsedObj.contentLength should ===(11)
     parsedObj.date should ===("2015-08-27T19:33:34Z")
     parsedObj.contentType should ===("text/plain")
-    parsedObj.uri should ===("http://example.com/a?x=y&l=2")
-    parsedObj.domain should ===("example.com")
+    parsedObj.uri should ===("com.example/a?x=y&l=2")
     parsedObj.reverseDomain should ===("com.example")
   }
 
@@ -68,8 +67,7 @@ class WETParserSpec extends FlatSpec with Matchers {
     parsedObj.contentLength should ===(11)
     parsedObj.date should ===("2015-08-27T19:33:34Z")
     parsedObj.contentType should ===("text/plain")
-    parsedObj.uri should ===("http://example.com/a?x=y&l=2")
-    parsedObj.domain should ===("example.com")
+    parsedObj.uri should ===("com.example/a?x=y&l=2")
     parsedObj.reverseDomain should ===("com.example")
 
   }
