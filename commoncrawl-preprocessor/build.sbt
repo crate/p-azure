@@ -8,5 +8,5 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
-  "com.lihaoyi" %% "upickle" % "0.3.8",
+  "com.lihaoyi" %% "upickle" % "0.3.8"
 )
