@@ -6,7 +6,7 @@ import scala.io.Source
 import upickle.default._
 
 
-case class Page(uri: String, domain: String, reverseDomain: String, date: String, contentType: String, contentLength: Long, content: String)
+case class Page(uri: String, reverseDomain: String, date: String, contentType: String, contentLength: Long, content: String)
 
 
 trait WETParser extends Iterator[Page] {
@@ -53,10 +53,12 @@ trait WETParser extends Iterator[Page] {
         linesIterator.next()
 
         val content = getUntil(_ == blockDelimiter)
-        val domain = uri.split('/')(2)
+        val splitUri= uri.split('/')
+        val domain = splitUri(2)
         val reverseDomain = domain.split('.').reverse.mkString(".")
+        val newUri = splitUri.updated(2, reverseDomain).mkString("/")
 
-        return Option(new Page(uri, domain, reverseDomain, zonedDate, contentType, contentLength, content))
+        return Option(new Page(newUri, reverseDomain, zonedDate, contentType, contentLength, content))
       }
     }
     return Option.empty
@@ -68,8 +70,6 @@ trait WETParser extends Iterator[Page] {
     source.close()
     throw new Exception("No more items")
   })
-
-  def all = this.toVector
 }
 
 
