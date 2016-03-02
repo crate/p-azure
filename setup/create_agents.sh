@@ -57,7 +57,7 @@ for i in $(eval echo "{$(($LAST_INSTANCE + 1))..$(($LAST_INSTANCE + $NUM_INSTANC
       --storage-account-name $STORAGE_ACCOUNT \
       --disable-boot-diagnostics
 
-    if [ $INSTANCE_TYPE = "agent1" ]; then
+    if [ $INSTANCE_TYPE = "agent" ]; then
       azure vm disk attach-new \
         --resource-group $RESOURCE_GROUP \
         --vm-name $NAME \
