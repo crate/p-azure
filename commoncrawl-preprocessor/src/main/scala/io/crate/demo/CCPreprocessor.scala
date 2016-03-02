@@ -6,7 +6,7 @@ import scala.io.Source
 import upickle.default._
 
 
-case class Page(uri: String, reverseDomain: String, date: String, contentType: String, contentLength: Long, content: String)
+case class Page(uri: String, fqdn: String, date: String, ctype: String, clen: Long, content: String)
 
 
 trait WETParser extends Iterator[Page] {

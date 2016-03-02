@@ -52,11 +52,11 @@ class WETParserSpec extends FlatSpec with Matchers {
     parsed.size should ===(1)
     val parsedObj = parsed(0)
     parsedObj.content should ===("Hello World")
-    parsedObj.contentLength should ===(11)
+    parsedObj.clen should ===(11)
     parsedObj.date should ===("2015-08-27T19:33:34Z")
-    parsedObj.contentType should ===("text/plain")
+    parsedObj.ctype should ===("text/plain")
     parsedObj.uri should ===("com.example/a?x=y&l=2")
-    parsedObj.reverseDomain should ===("com.example")
+    parsedObj.fqdn should ===("com.example")
   }
 
   "A WETParser" should "ignore any other WARC-Type" in {
@@ -64,11 +64,11 @@ class WETParserSpec extends FlatSpec with Matchers {
     parsed.size should ===(1)
     val parsedObj = parsed(0)
     parsedObj.content should ===("Hello World")
-    parsedObj.contentLength should ===(11)
+    parsedObj.clen should ===(11)
     parsedObj.date should ===("2015-08-27T19:33:34Z")
-    parsedObj.contentType should ===("text/plain")
+    parsedObj.ctype should ===("text/plain")
     parsedObj.uri should ===("com.example/a?x=y&l=2")
-    parsedObj.reverseDomain should ===("com.example")
+    parsedObj.fqdn should ===("com.example")
 
   }
 
