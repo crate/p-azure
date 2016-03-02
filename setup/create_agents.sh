@@ -31,6 +31,7 @@ VNET_SUBNET=subnet-1-azure1k
 REGION=westeurope
 STORAGE_ACCOUNT=azure1kpremstorage
 USER=swarm
+URN=canonical:UbuntuServer:15.10:15.10.201602260 # CoreOS:CoreOS:Beta:899.8.0
 
 EXISTING_INSTANCES=$(azure vm list --resource-group azure1k | awk '{print $3}' \
   | grep swarm-$INSTANCE_TYPE | cut -d- -f3 | sort -g)
@@ -41,7 +42,7 @@ for i in $(eval echo "{$(($LAST_INSTANCE + 1))..$(($LAST_INSTANCE + $NUM_INSTANC
   ( NAME="swarm-$INSTANCE_TYPE-$i"
     echo $NAME
     azure vm create \
-      --custom-data cloud-config-$INSTANCE_TYPE.yaml \
+      --custom-data cloud-$INSTANCE_TYPE.yaml \
       --resource-group $RESOURCE_GROUP \
       --name $NAME \
       --nic-name nic_$NAME \
@@ -49,14 +50,14 @@ for i in $(eval echo "{$(($LAST_INSTANCE + 1))..$(($LAST_INSTANCE + $NUM_INSTANC
       --vnet-subnet-name $VNET_SUBNET \
       --location $REGION \
       --os-type Linux \
-      --image-urn CoreOS:CoreOS:Beta:899.8.0 \
+      --image-urn $URN \
       --vm-size Standard_DS12 \
       --admin-username $USER \
       --admin-password $PASSWORD \
       --storage-account-name $STORAGE_ACCOUNT \
       --disable-boot-diagnostics
 
-    if [ $INSTANCE_TYPE = "agent" ]; then
+    if [ $INSTANCE_TYPE = "agent1" ]; then
       azure vm disk attach-new \
         --resource-group $RESOURCE_GROUP \
         --vm-name $NAME \

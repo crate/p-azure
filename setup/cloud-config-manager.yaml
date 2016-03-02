@@ -64,16 +64,17 @@ coreos:
 
         [Install]
         WantedBy=multi-user.target
-    - name: pull-crate.service
+    - name: swarm-manager.service
       command: start
       content: |
         [Unit]
-        Description=Pull the latest Crate Docker Image
-        After=swarm-agent.service
-
+        Description=Docker Swarm Manager Container
+        After=docker.service
+        Requires=docker.service
         [Service]
-        ExecStart=/usr/bin/docker pull crate:latest
-        Type=oneshot
+        ExecStart=/usr/bin/docker run -d -p 8333:2375 swarm manage etcd://$private_ipv4:2379/swarm
+        [Install]
+        WantedBy=multi-user.target
     - name: ruxit-agent.service
       command: start
       content: |
