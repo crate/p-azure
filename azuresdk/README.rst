@@ -25,7 +25,7 @@ Run ``list_blobs.py``::
   $ python list_blobs.py --help
   usage: list_blobs.py [-h] [--storage-account STORAGE_ACCOUNT]
                        [--storage-account-key STORAGE_ACCOUNT_KEY]
-                       [--out-folder OUT_FOLDER]
+                       [--out-folder OUT_FOLDER] [--limit LIMIT]
 
   Iterate over storage account, generate file urls and store them grouped by
   partition value (week).
@@ -37,7 +37,8 @@ Run ``list_blobs.py``::
     --storage-account-key STORAGE_ACCOUNT_KEY
                           2nd key of the storage account
     --out-folder OUT_FOLDER
-                          Output directory
+                          output directory
+    --limit LIMIT         File limit per partition
 
 Example::
 
