@@ -29,9 +29,10 @@ RESOURCE_GROUP=azure1k
 VNET_NAME=vnet-azure1k
 VNET_SUBNET=subnet-1-azure1k
 REGION=westeurope
-STORAGE_ACCOUNT=azure1kpremstorage
+STORAGE_ACCOUNT=azure1kswarmagentsplrs
 USER=swarm
-URN=canonical:UbuntuServer:15.10:15.10.201602260 # CoreOS:CoreOS:Beta:899.8.0
+
+URN=canonical:UbuntuServer:15.10:15.10.201602260
 
 EXISTING_INSTANCES=$(azure vm list --resource-group azure1k | awk '{print $3}' \
   | grep swarm-$INSTANCE_TYPE | cut -d- -f3 | sort -g)
@@ -52,21 +53,29 @@ for i in $(eval echo "{$(($LAST_INSTANCE + 1))..$(($LAST_INSTANCE + $NUM_INSTANC
       --os-type Linux \
       --image-urn $URN \
       --vm-size Standard_DS12 \
+      --data-disk-vhd disk-vhd-$NAME \
+      --data-disk-size 300 \
       --admin-username $USER \
       --admin-password $PASSWORD \
       --storage-account-name $STORAGE_ACCOUNT \
       --disable-boot-diagnostics
 
-    if [ $INSTANCE_TYPE = "agent" ]; then
-      azure vm disk attach-new \
-        --resource-group $RESOURCE_GROUP \
-        --vm-name $NAME \
-        --size-in-gb 256 \
-        --host-caching None \
-        --vhd-name vhdssd_$NAME
+    # if [ $INSTANCE_TYPE = "agent" ]; then
+    #   azure vm disk attach-new \
+    #     --resource-group $RESOURCE_GROUP \
+    #     --vm-name $NAME \
+    #     --size-in-gb 256 \
+    #     --host-caching None \
+    #     --vhd-name vhdssd_$NAME-1
 
-      azure vm disk list --resource-group $RESOURCE_GROUP $NAME
-    fi 
+    #   azure vm disk attach-new \
+    #     --resource-group $RESOURCE_GROUP \
+    #     --vm-name $NAME \
+    #     --size-in-gb 256 \
+    #     --host-caching None \
+    #     --vhd-name vhdssd_$NAME-2
+
+    #   azure vm disk list --resource-group $RESOURCE_GROUP $NAME
+    # fi 
   ) &
-
 done
