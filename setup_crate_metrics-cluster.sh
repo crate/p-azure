@@ -164,7 +164,7 @@ for i in 1 2 3; do
     --vnet-subnet-name subnet-pub_crate-metrics \
     --location $CRATE_1K_METRIC_REGION \
     --os-type Linux \
-    --image-urn OpenLogic:CentOS:7.1:7.1.20150731 \
+    --image-urn canonical:UbuntuServer:15.10:15.10.201602260 \
     --vm-size $VM_TYPE_SSD \
     --public-ip-name ip_$NAME \
     --admin-username azure \
