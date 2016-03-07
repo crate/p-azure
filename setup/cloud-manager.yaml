@@ -4,7 +4,6 @@ users:
     ssh-import-id: None
     lock-passwd: true
     ssh-authorized-keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlsX57sCjlGTnGv5UIH/dSPX1jVTToDajEzwz0WPAWQ+0PIxlDyQIdeERQA1smS9BnTNSMs+BCWFGtsT6mJyOtXA1sg+v1jjr2zxGi5RcXDvOug6tIxHaNGL9OzIgVqvxAwSmGsJyaTodUF94TKLuLbVT+giHrFXDvrTofXpGDefGfX7IQDM/1swYle7fM0RaYNhvzOeYiBThjXVa4Sh2Pa3ovR7og7Zo7ItJjIIOk6H37pZN3UbLQtQLeXY94FtaxySxeWkMG7FL2JE/RJ7RIlun7bYZ7DoLXR9yrokTHtat/P6LHpB2TQyB6BtGwdrxKjrjA41MGMnHVFzB6qN4V magnus
       - ssh-dss AAAAB3NzaC1kc3MAAAEBAMWMhmzanVpREfj+ERXYLUz7p7YTPKJVrkhPygZ55ZOZumXFqkdCg3NlrQl/Ctm+Yc/6raQ8X1bqnKqkl5vQUx6zJmp8zb5d/HfB3lwVOPUw+GYCMsWXX1amhyhU2oDWAl+vQJJpxDNteS5vQIL/7DsAEA6E0CmLyTtdf4m+vxT5qoaDZB5Azm4Yw6Whecgi0OLArKSVZThs24Y9oVHijn6lode+y5ZzytKgJmGJfdN/oqT+2sEmW+xy/f6tOjiWgX1cmuBav1RezYN4vFmogl5yQO2JK6guFAomMU55nZC9iZN4HUVa5v9o6XA185XVtsaPDTdb1ZDaFDW6osBIUpEAAAAVAL0R0VDilO0mgME1Ya/MNn+i3lhVAAABACEIcxidIMbeVM4EK5DLRvAj+FWdKnzz5blkug9490Sj1bUPPhkBUnwwkdAIPNp2XFTEdUbAWr9V7IZn0pJbaBrfZHQXPjuPC4RAiuJnSRVq3DGa9TUYYCBsSvYSR74WnoHHQcYuFRNOCLeYly9yujNI5ujvgJqFnPFUm1nwoCKxz0tBUDlepGn6qt4+k7tF2k00fRheFBU5eWhpRUc2177WiICg2S3lV78gZVf+OUGOdCYjX0+Gzu28kN94e2M3CT6dLhfR0EvwmeBpNHY3aET5Cnz84aoUb6ocxXVseBA+mwA/0tlmJphQdQLKbVOV9q76jSX+bmk/5k26djd65McAAAEAVjtTvHSjsgjODni5OVJwKXmfapLqKif3cLZG2UULGfILZrOnV+Q6eZrLNwaPh98CpV2iB/7pawV3f1CPCjY0BxOIE2T2CGqAieEaczWRceugsY/jwvaD1SS92CnhZtrHB+0cK+dvZX6VXgYXlUa5NSuO66TocvMqz8A3ZjVAHKlnAXtngn1bAMTS2Ycui/V/NpVsZmCfF9CH5qbthqWQ1ElZ7Qxlfw3EDwfjpnPo9Qt/00lyfKjwXo+SFn1ZXrxPqpTbIYhcVkoKdFCRz4YpV/iJhXgI9GxhbQkkXjsBLgKyRAUgoBvxo30zwNQowI020tXfvZTD1/F92Oi2bhA9JQ== dorn
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDORGIa/Gerh6veaGEEsyZ8SMsMazKIUykZiPSJnvekkdiNynC4n4fbCvTLTUowxGQQ6gGadckZmp9DPqz1kwGea6wghI5wI3iN9DLN8QL2gWXF0mZBcyfuVM9+kGX8NLRP+tfPsDrEtgYC+HIbXwIGwK6I7u+Ne9X1RqVxG06OyVJ+r8CgResHWSE9D++eVZoNGT10NhXSWfXa2u53+Cqxkj7iKPNhooE0AMbp6MOEVdUnXYQVBWeW81hke54d2eKOL7oeg/j//kvdr6jQN5NsyXM74qRzfka8r1bGMb+KL2v6HYJfVpxv9M5NYAKeze8ibpBvbg0t+b5n1cvV6ezX fussenegger
       - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAueuabCW5XjVB8CQna9thh0qTJx4rVqbJVFVLIk7MZP40Xb64CNDnheGj7zeuavH7abn694YkuNcw6XSAAxK0AOLpuNmDRbC1kTyy13yeqRNqhttagWipRTuGVPAzFG+nOPdar+GXwGxYnsKccSUmdn/GcdUFR/A8PfZADrw5DALCPMGc8nnytd8dFatAvppZog03JmJbBXQtvTukyOoxejf+sHeAtUGqnWHWvhZcoQvUsBYsxgpE88e1ZsE8jCUQ3dO5I7qD68w5PVrViYdIYO334PtWQ14TJVHg0bzdgs4BNAunDy7KIUqmKxZYRtQvGWbIgDwj8T6JiWHVV7Yrew== utz
@@ -19,50 +18,3 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: sudo
     shell: /bin/bash
-
-runcmd:
-  - sh -c 'echo "root:root" | sudo chpasswd'
-  - sed -i 's/^PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
-  - mkdir -p /opt/bin
-
-  # etcd2
-  # token https://discovery.etcd.io/new?size=1
-  # etcd docker image can be used
-  - export TOKEN=1d1a01eeda27f6a0468187d0285b921b
-  - curl -L  https://github.com/coreos/etcd/releases/download/v2.2.4/etcd-v2.2.4-linux-amd64.tar.gz -o etcd-v2.2.4-linux-amd64.tar.gz
-  - tar xzvf etcd-v2.2.4-linux-amd64.tar.gz -C /opt/bin
-  - chmod +x /opt/bin/etcd-v2.2.4-linux-amd64/etcd
-  - chmod +x /opt/bin/etcd-v2.2.4-linux-amd64/etcdctl
-  - ln -sf /opt/bin/etcd-v2.2.4-linux-amd64/etcd /usr/local/bin/etcd
-  - ln -sf /opt/bin/etcd-v2.2.4-linux-amd64/etcdctl /usr/local/bin/etcdctl
-  - sh -c 'echo "[Unit]\nDescription=etcd\n\n[Service]\nExecStart=/usr/local/bin/etcd -name $(hostname) -initial-advertise-peer-urls http://"$(hostname -i):2380" -listen-peer-urls http://"$(hostname -i):2380" -listen-client-urls http://"$(hostname -i):2379",http://127.0.0.1:2379 -advertise-client-urls http://"$(hostname -i):2379" -discovery https://discovery.etcd.io/$TOKEN" > /lib/systemd/system/etcd.service'
-  - systemctl enable etcd.service
-  - systemctl start etcd.service
-
-  # Docker daemon
-  - apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-  - sh -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-wily main" > /etc/apt/sources.list.d/docker.list'
-  - apt-get -y update
-  - apt-get -y install linux-image-extra-$(uname -r)
-  - apt-get -y install docker-engine
-  - mkdir /etc/systemd/system/docker.service.d
-  - sh -c 'echo "[Service]\nExecStart=\nExecStart=/usr/bin/docker daemon --cluster-advertise eth0:2375 --cluster-store etcd://"$(hostname -i):2379" -H=tcp://0.0.0.0:2375 -H fd://" >> /etc/systemd/system/docker.service.d/docker.conf'
-  - systemctl daemon-reload
-  - systemctl restart docker
-
-  # Ruxit agent
-  - wget -O /opt/bin/ruxit-Agent-Linux-1.87.198.sh https://akp88036.live.ruxit.com/installer/agent/unix/latest/3xEDwbMRpYzbTI5H
-  - chmod +x /opt/bin/ruxit-Agent-Linux-1.87.198.sh
-  - sh -c 'echo "[Unit]\nDescription=Ruxit agent\n\n[Service]\nExecStart=/opt/bin/ruxit-Agent-Linux-1.87.198.sh\n\n[Install]\nWantedBy=multi-user.target" > /lib/systemd/system/ruxit.service'
-  - systemctl enable ruxit.service
-  - systemctl start ruxit.service
-
-  # Docker compose
-  - curl -Lo /opt/bin/docker-compose -z /opt/bin/docker-compose https://github.com/docker/compose/releases/download/1.6.2/docker-compose-Linux-x86_64
-  - chmod +x /opt/bin/docker-compose
-  - ln -sf /opt/bin/docker-compose /usr/local/bin/docker-compose
-
-  # Docker Swarm
-  - sh -c 'echo "[Unit]\nDescription=Docker Swarm\n\n[Service]\nExecStart=/usr/bin/docker run -d -p 8333:2375 swarm manage token://$TOKEN\n\n[Install]\nWantedBy=multi-user.target" > /lib/systemd/system/swarm-manager.service'
-  - systemctl enable swarm-manager.service
-  - systemctl start swarm-manager.service
