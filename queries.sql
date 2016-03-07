@@ -7,13 +7,17 @@ create table if not exists commoncrawl (
   --
   ctype string,
   clen int,
-  content string INDEX using fulltext with (analyzer = 'english')
+  content string INDEX using fulltext with (max_token_length = 40)
 ) clustered into 3 shards partitioned by (week_partition);
 
 
 -- add primary key query. for showing off routing to primary key
 select path from commoncrawl where authority = 'io.crate' order by 1;
 select path, authority from commoncrawl  where authority like 'com.google' order by 1;
+
+-- "get" query directly fetches stuff
+select * from commoncrawl  where authority = 'com.google' and ssl = 'false' and path = '/' and date = 0 order by 1;
+
 
 -- number of distinct domains, add conditions to reduce load
 select count(distinct uri) / cast(count(distinct authority) as double) as "uris per domain" from commoncrawl;
