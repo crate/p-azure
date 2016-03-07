@@ -44,3 +44,15 @@ This app fetches data every 10s from localhost and stores it on staging cluster.
 ```
 python fetch-metrics.py -s <SOURCE-HOSTS> ... -d <DESTINATION-HOSTS> ...
 ```
+
+## Query Data from metrics
+
+### Sample queries
+
+#### Used Heap
+```sql
+select node_id,
+sum(heap['used']) as heap_used,
+date_format(heap['probe_timestamp']) as probe_timestamp
+from azure.metrics group by node_id, probe_timestamp order by probe_timestamp desc limit 32;
+```
