@@ -41,29 +41,31 @@ while [[ $# > 1 ]]; do
   shift
 done
 
-IFS='' read -r -a CRATE_CONTAINERS <<< \
-    $(docker ps -f "name=swarm-agent" --format "{{.Names}}" | cut -d/ -f1 | cut -d- -f3 | sort -g)
+CRATE_CONTAINERS=($(docker ps -f "name=swarm-agent" --format "{{.Names}}" | cut -d/ -f1 | cut -d- -f3 | sort -g))
+NEW_CONTAINERS=()
 
-LAST=${CRATE_CONTAINERS[${#CRATE_CONTAINERS[@]}-1]} 
-FIRST=${CRATE_CONTAINERS[0]}
+if [ ${#CRATE_CONTAINERS[@]} -ne 0 ]; then
+    LAST=${CRATE_CONTAINERS[${#CRATE_CONTAINERS[@]}-1]}
+    FIRST=${CRATE_CONTAINERS[0]}
+    for i in $(eval echo "{$FIRST..$LAST}"); do
+        if [[ ! ${CRATE_CONTAINERS[*]} =~ $i ]]; then
+            echo "swarm-agent-$i";
+        NEW_CONTAINERS+=(swarm-agent-$i)
+        fi
+    done
+fi
 
-declare -a NEW_CONTAINERS=($(for i in $(eval echo "{$FIRST..$LAST}"); do 
-    if [[ ! ${CRATE_CONTAINERS[*]} =~ $i ]]; then 
-        echo "swarm-agent-$i";
-    fi
- done))
-
-ADD=$(($INSTANCES - ${#NEW_CONTAINERS[@]}))
+ADD=$(($INSTANCES + ${#NEW_CONTAINERS[@]}))
 for i in $(eval echo "{$(($LAST + 1))..$(($LAST + $ADD))}"); do
     NEW_CONTAINERS+=(swarm-agent-$i)
 done
 
-for i in $(NEW_CONTAINERS[@]); do
-    NODE_NAME=swarm-agent-$i
+for i in "${NEW_CONTAINERS[@]}"; do
+    NODE_NAME=$i
     docker run -d -p 4200:4200 -p 4300:4300 --env="constraint:node==$NODE_NAME" --env="CRATE_HEAP_SIZE=14g"  \
         -v /mnt/data/disk1:/data/disk1 \
-        --name $NODE_NAME
-        crate:latest \
+        --name $NODE_NAME \
+        crate/crate:a1k \
         crate  \
         -Des.cluster.name=crate-swarm \
         -Des.indices.store.throttle.max_bytes_per_sec=200mb \
