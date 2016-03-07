@@ -29,7 +29,7 @@ RESOURCE_GROUP=azure1k
 VNET_NAME=vnet-azure1k
 VNET_SUBNET=subnet-1-azure1k
 REGION=westeurope
-STORAGE_ACCOUNT=azure1kmanagers
+STORAGE_ACCOUNT=azure1kagents
 USER=swarm
 
 URN=canonical:UbuntuServer:15.10:15.10.201602260
@@ -54,7 +54,7 @@ for i in $(eval echo "{$(($LAST_INSTANCE + 1))..$(($LAST_INSTANCE + $NUM_INSTANC
       --os-type Linux \
       --image-urn $URN \
       --vm-size Standard_DS12 \
-      --data-disk-vhd diska-vhd-$NAME \
+      --data-disk-vhd disk-vhd-$NAME \
       --data-disk-size 300 \
       --admin-username $USER \
       --admin-password $PASSWORD \
