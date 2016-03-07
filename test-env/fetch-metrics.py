@@ -70,7 +70,7 @@ class MetricFetcher():
     def _fetch_metrics(self):
         self.fetch_cursor.execute("""
             SELECT
-            current_timestamp as query_ts, id, name, hostname, load, mem, heap, fs, thread_pools, os, os_info, network, process
+            current_timestamp as query_ts, id, name, hostname, load, mem, heap, fs, os, network, process
             FROM sys.nodes
             """)
         return self.fetch_cursor.fetchall()
@@ -88,8 +88,8 @@ class MetricFetcher():
             insert_values = [tuple(value) for value in metrics]
             self.store_cursor.executemany("""
                         INSERT INTO {0}
-                        (query_ts, node_id, node_name, hostname, load, mem, heap, fs, thread_pools, os, os_info, network, process)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""".format(StoreResource.METRICS_TABLE_NAME),
+                        (query_ts, node_id, node_name, hostname, load, mem, heap, fs, os, network, process)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""".format(StoreResource.METRICS_TABLE_NAME),
                         insert_values)
         else:
             print ("metric data empty - nothing to insert")

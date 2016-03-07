@@ -16,7 +16,7 @@ to store the data can be different.
 ```
 virtualenv env
 source ./env/bin/activate
-./env/bin/pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### Create table schemas

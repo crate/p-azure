@@ -8,9 +8,7 @@ create table azure.metrics (
   mem object,
   heap object,
   fs object,
-  thread_pools array(object),
   os object,
-  os_info object,
   network object,
   process object
 ) with (number_of_replicas = '0-all');
