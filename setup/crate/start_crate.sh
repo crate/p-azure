@@ -62,11 +62,13 @@ done
 
 for i in "${NEW_CONTAINERS[@]}"; do
     NODE_NAME=$i
-    docker run -d -p 4200:4200 -p 4300:4300 --env="constraint:node==$NODE_NAME" --env="CRATE_HEAP_SIZE=14g"  \
-        -v /mnt/data/disk1:/data/disk1 \
-        --name $NODE_NAME \
-        crate/crate:a1k \
-        crate  \
+    docker run -d -p 4200:4200 -p 4300:4300 \
+      --name $NODE_NAME \
+      --env="constraint:node==$NODE_NAME"
+      --env="CRATE_HEAP_SIZE=14g"  \
+      --volume /mnt/data1/data:/data1 \
+      crate/crate:a1k \
+      crate  \
         -Des.cluster.name=crate-swarm \
         -Des.indices.store.throttle.max_bytes_per_sec=200mb \
         -Des.indices.memory.index_buffer_size=15% \
@@ -76,11 +78,10 @@ for i in "${NEW_CONTAINERS[@]}"; do
         -Des.node.data=$ISDATA \
         -Des.http.port=4200 \
         -Des.transport.tcp.port=4300 \
-        -Des.transport.publish_host=$NODE_NAME   \
+        -Des.transport.publish_host=''$(hostname -i)''   \
         -Des.multicast.enabled=false  \
         -Des.discovery.zen.minimum_master_nodes=2  \
         -Des.discovery.type=srv  \
         -Des.discovery.srv.query=_azure1k._srv.fir.io \
-        -Des.path.data=/data/disk1/data \
-        -Des.path.logs=/data/logs
+        -Des.path.data=/data1
 done

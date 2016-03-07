@@ -24,7 +24,11 @@ runcmd:
   - sh -c 'echo "root:root" | sudo chpasswd'
   - sed -i 's/^PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
   - mkdir -p /opt/bin
-  - mkdir -p /mnt/data/disk1
+  - mkdir -p /mnt/data1
+
+  # Settings ulimit
+  - echo '* hard memlock unlimited' >> /etc/security/limits.conf
+  - echo '* soft memlock unlimited' >> /etc/security/limits.conf
 
   # Docker daemon
   - export TOKEN=35d3559713d6fce15774b1f0f62b7784
@@ -35,7 +39,7 @@ runcmd:
   - apt-get -y install docker-engine
   - mkdir /etc/systemd/system/docker.service.d
 
-  - sh -c 'echo "[Service]\nExecStart=\nExecStart=/usr/bin/docker daemon --cluster-advertise eth0:2375 --label =$(hostname) --cluster-store etcd://"$(hostname -i):2379" -H=tcp://0.0.0.0:2375 -H fd://" >> /etc/systemd/system/docker.service.d/docker.conf'
+  - sh -c 'echo "[Service]\nExecStart=\nExecStart=/usr/bin/docker daemon --cluster-advertise eth0:2375 --cluster-store etcd://"$(hostname -i):2379" -H=tcp://0.0.0.0:2375 -H fd://" >> /etc/systemd/system/docker.service.d/docker.conf'
   - systemctl daemon-reload
   - systemctl restart docker
 
@@ -46,22 +50,16 @@ runcmd:
   - systemctl enable ruxit.service
   - systemctl start ruxit.service
 
-  # Docker compose
-  - curl -Lo /opt/bin/docker-compose -z /opt/bin/docker-compose https://github.com/docker/compose/releases/download/1.6.2/docker-compose-Linux-x86_64
-  - chmod +x /opt/bin/docker-compose
-  - ln -sf /opt/bin/docker-compose /usr/local/bin/docker-compose
-
   # Docker Swarm
-  - sh -c 'echo "[Unit]\nDescription=Docker compose\n\n[Service]\nExecStart=/usr/bin/docker run -d swarm join --addr="$(hostname):2375" token://$TOKEN\n\n[Install]\nWantedBy=multi-user.target" > /lib/systemd/system/swarm-agent.service'
+  - sh -c 'echo "[Unit]\nDescription=Docker compose\n\n[Service]\nExecStart=/usr/bin/docker run -d swarm join --addr="$(hostname -i):2375" token://$TOKEN\n\n[Install]\nWantedBy=multi-user.target" > /lib/systemd/system/swarm-agent.service'
   - systemctl enable swarm-agent.service
   - systemctl start swarm-agent.service
 
   # Docker Crate.io image pull
-  - docker pull crate:latest
+  - docker pull crate/crate:a1k
 
   - sudo echo -e "o\nn\np\n1\n\n\nw" | sudo fdisk /dev/sdc
   - sudo echo -e "y" | sudo mkfs.ext4 /dev/sdc
-  - sudo mount /dev/sdc /mnt/data/disk1
+  - sudo mount /dev/sdc /mnt/data1
 
-  - mkdir /mnt/data/disk1/data
-  - mkdir /mnt/data/disk1/logs
+  - mkdir /mnt/data1/data
