@@ -41,21 +41,23 @@ while [[ $# > 1 ]]; do
   shift
 done
 
-IFS='' read -r -a CRATE_CONTAINERS <<< \
-    $(docker ps -f "name=swarm-node" --format "{{.Names}}" | cut -d/ -f1 | cut -d- -f3 | sort -g)
+CRATE_CONTAINERS=($(docker ps -f "name=swarm-node-" --format "{{.Names}}" | cut -d/ -f1 | cut -d- -f3 | sort -g))
+NEW_CONTAINERS=()
 
-LAST=${CRATE_CONTAINERS[${#CRATE_CONTAINERS[@]}-1]} 
-FIRST=${CRATE_CONTAINERS[0]}
+if [ ${#CRATE_CONTAINERS[@]} -ne 0 ]; then
+   LAST=${CRATE_CONTAINERS[${#CRATE_CONTAINERS[@]}-1]}
+   FIRST=${CRATE_CONTAINERS[0]}
+   for i in $(eval echo "{$FIRST..$LAST}"); do
+       if [[ ! ${CRATE_CONTAINERS[*]} =~ $i ]]; then
+           echo "swarm-node-$i";
+       NEW_CONTAINERS+=(swarm-node-$i)
+       fi
+   done
+fi
 
-declare -a NEW_CONTAINERS=($(for i in $(eval echo "{$FIRST..$LAST}"); do 
-    if [[ ! ${CRATE_CONTAINERS[*]} =~ $i ]]; then 
-        echo "swarm-node-$i";
-    fi
- done))
-
-ADD=$(($INSTANCES - ${#NEW_CONTAINERS[@]}))
+ADD=$(($INSTANCES + ${#NEW_CONTAINERS[@]}))
 for i in $(eval echo "{$(($LAST + 1))..$(($LAST + $ADD))}"); do
-    NEW_CONTAINERS+=(swarm-node-$i)
+   NEW_CONTAINERS+=(swarm-node-$i)
 done
 
 for i in $(NEW_CONTAINERS[@]); do
