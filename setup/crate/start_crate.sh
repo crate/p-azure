@@ -64,24 +64,29 @@ done
 
 for i in "${NEW_CONTAINERS[@]}"; do
     NODE_NAME=$i
-    docker run -d -p 4200:4200 -p 4300:4300 --env="constraint:node==$NODE_NAME" --env="CRATE_HEAP_SIZE=31g" \
-        -v /mnt:/data \
+    docker run -d -p 4200:4200 -p 4300:4300 \
+        --env="constraint:node==$NODE_NAME" \
+        --env="CRATE_HEAP_SIZE=30g" \
         --name $NODE_NAME \
+        -v /mnt:/data \
+        -v /media/data1:/backup \
         crate:latest \
         crate  \
         -Des.cluster.name=crate-swarm \
-        -Des.indices.store.throttle.max_bytes_per_sec=200mb \
-        -Des.indices.memory.index_buffer_size=15% \
+        -Des.indices.store.throttle.max_bytes_per_sec=700mb \
+        -Des.indices.store.throttle.type=none \
+        -Des.indices.memory.index_buffer_size=25% \
         -Des.bootstrap.mlockall=true \
         -Des.index.store.type=mmapfs \
         -Des.node.master=$ISMASTER \
         -Des.node.data=$ISDATA \
+        -Des.node.name=$NODE_NAME \
         -Des.http.port=4200 \
         -Des.transport.tcp.port=4300 \
         -Des.transport.publish_host=$NODE_NAME \
-        -Des.multicast.enabled=false  \
+        -Des.multicast.enabled=false \
         -Des.discovery.zen.minimum_master_nodes=2  \
-        -Des.discovery.type=srv  \
+        -Des.discovery.type=srv \
         -Des.discovery.srv.query=_azure1k._srv.fir.io \
         -Des.path.data=/data
 done

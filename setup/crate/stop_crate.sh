@@ -15,10 +15,5 @@ while [[ $# > 1 ]]; do
   shift
 done
 
-if [ -z "$PATTERN" ]; then
-    echo "Pattern for matching containers names is not provoded!";
-    exit 0;
-fi
-
-docker kill $(docker ps -a -f "name=$PATTERN" | awk '{print $1}')
-docker rm $(docker ps -a -f "name=$PATTERN" | awk '{print $1}')
+docker kill $(docker ps -a | grep crate | awk '{print $1}')
+docker rm $(docker ps -a | grep crate | awk '{print $1}')
