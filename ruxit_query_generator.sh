@@ -17,7 +17,7 @@ do
     for agg_type in $agg_types
     do
         cat <<EOF
-	curl -L -H "Authorization: Api-Token Ws31UgzFS4m1g0np0tdZs" "https://akp88036.live.ruxit.com/api/v1/timeseries?timeseriesId=com.ruxit.builtin:$i&startTimestamp=$startTimestamp&endTimestamp=$endTimestamp&aggregationType=$agg_type" > $i.json 
+	curl -L -H "Authorization: Api-Token Ws31UgzFS4m1g0np0tdZs" "https://akp88036.live.ruxit.com/api/v1/timeseries?timeseriesId=com.ruxit.builtin:$i&startTimestamp=$startTimestamp&endTimestamp=$endTimestamp&aggregationType=$agg_type" > $i.$agg_type.json 
 sleep 6
 EOF
      done
