@@ -1,0 +1,24 @@
+node:
+  name: _HOSTNAME_
+  master: _MASTER_
+  data: _DATA_
+indices:
+  store.throttle.max_bytes_per_sec: 700mb
+  store.throttle.type: none
+  memory.index_buffer_size: 25%
+  recovery:
+    concurrent_streams: 20
+    max_bytes_per_sec: 350mb
+bootstrap.mlockall: true
+index.store.type: mmapfs
+multicast.enabled: false
+discovery:
+  zen:
+    minimum_master_nodes: 2
+    ping.unicast.hosts:
+      - 10.0.0.100:4300
+      - 10.0.0.101:4300
+      - 10.0.0.102:4300
+path:
+  data: /mnt/crate
+  logs: /media/data1/cratelogs

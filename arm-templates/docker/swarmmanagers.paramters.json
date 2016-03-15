@@ -1,0 +1,15 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sshPublicKey": {
+      "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDM6FpvROx/LAkBJCIv17PMvanuYVXoDrnjbH2i3SlzkA+9kkuSIi/S8KMhoVt7xfuFyQ2yl6Zcs80Fjnn4kk7L6B8GmAe1yldG6rRweboiR2V6KiFal92xgk4q2H6lGKLBG/G2K6eRKdJosfDbp1se2AlEXN63A1kYrojwxFbYlpBPNCCT8HEfyrFFSzGyqBiDmQUxchcRKX+NV0wQW2ksiZAtMKo9Wc0ePI8DLiq3WvTLSNnFwlXtVVWRxAJ4k1ej3Is1/xkoza1znYSrwGBZCcuVjRHPlnGhs6SI2xRxX9w6KgZJIfc+1aOHuGHe26CwlKKKOIz35R4Vlo3lgWffnF4yOxbOiss5kI6X7XA8BcK7UingS9U3zpcnQGF86PM36/FAnvaDIL+3+Zi7Qwl2pf9BILf7BJ9PoptQNZkPCWvlcf4apflqykdDfp7llfcD3h98PzqGHiyuvIGlkP1kBH+gFHwViR8e7JsdZc4XCW2YA4af8PjeVqFFGuYqD/SUpllLdcR5Wh1ps1g2HcNQSFz4hrCqNyrWfJR5uqcaQQ4e8iPXyCmTUknf8+7jY1aWH4+Dg//fstie3jfowXkWMOwJJoRc7lf7/zbVnLvCzPYfp4OVMa2EBcUGb63HNstkiphDPZLJvAd58Dpx2zsTAKs1OkNGQo1jrg9ZqtvKvw== office@crate.io"
+    },
+    "vmCount": {
+      "value": 3
+    },
+    "vmSize": {
+      "value": "Standard_D14_v2"
+    }
+  }
+}
