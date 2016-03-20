@@ -8,7 +8,8 @@ metric_types="host.cpu.idle host.cpu.system host.cpu.load host.cpu.user host.cpu
 
 metrics2="host.availability pgi.availability webcheck.availability"
 
-frame=2hours
+startTimestamp=1457636400000
+endTimestamp=1457643600000
 agg_types="min avg max"
 
 for i in $metric_types
@@ -16,7 +17,8 @@ do
     for agg_type in $agg_types
     do
         cat <<EOF
-	curl -L -H "Authorization: Api-Token Ws31UgzFS4m1g0np0tdZs" "https://akp88036.live.ruxit.com/api/v1/timeseries?timeseriesId=com.ruxit.builtin:$i&relativeTime=$frame&aggregationType=$agg_type" 
+	curl -L -H "Authorization: Api-Token Ws31UgzFS4m1g0np0tdZs" "https://akp88036.live.ruxit.com/api/v1/timeseries?timeseriesId=com.ruxit.builtin:$i&startTimestamp=$startTimestamp&endTimestamp=$endTimestamp&aggregationType=$agg_type" > $i.$agg_type.json 
+sleep 6
 EOF
      done
 done > queries.sh 
@@ -24,6 +26,7 @@ done > queries.sh
 for m in $metrics2
 do
 	cat <<EOF
-	curl -L -H "Authorization: Api-Token Ws31UgzFS4m1g0np0tdZs" "https://akp88036.live.ruxit.com/api/v1/timeseries?timeseriesId=com.ruxit.builtin:$m&relativeTime=$frame
+	curl -L -H "Authorization: Api-Token Ws31UgzFS4m1g0np0tdZs" "https://akp88036.live.ruxit.com/api/v1/timeseries?timeseriesId=com.ruxit.builtin:$m&startTimestamp=$startTimestamp&endTimestamp=$endTimestamp" > $m.json
+sleep 6
 EOF
 done >> queries.sh
