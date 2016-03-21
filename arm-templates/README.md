@@ -4,8 +4,6 @@
 
 ### Resource groups
 
-**TODO: rename to have consistant naming!!!**
-
 * crate1k1network (VNET, VPN, ...)
     * network.json
 * crate1k1monitoring (Ganglia)
@@ -39,11 +37,13 @@ azure group crate crate1k1masterunit
 azure group deployment -f masterunit.json -e masterunit.parameters.json -g crate1k1masterunit -v
 ```
 
-### Starting Scale units
+### Deploying scale units
 
-`$ ./start_scaleunits.sh 1 11`
+```console
+./start_scaleunits.sh 1 11
+```
 
-```sh
+```bash
 #!/bin/bash -e
 
 for unit in `seq $1 $2`; do
@@ -59,9 +59,9 @@ done
 
 ## Docker Crate
 
-
 Docker run command (script)
 
+```bash
 #!/bin/bash -e
 #
 # Usage: ./start_crate.sh TYPE START END PREFIX
@@ -100,7 +100,7 @@ END=$3
 PREFIX="$4"
 
 for i in `seq $START $END`; do
-    NODE_NAME=${PREFIX}${i}
+    NODE_NAME=${PREFIX}${i} # e.g. crate-node-1
     docker run -d \
         -p 4200:4200 \
         -p 4300:4300 \
@@ -130,15 +130,48 @@ for i in `seq $START $END`; do
         -Des.path.data=/data \
         -Des.path.logs=/data1
 done
-
-
+```
 
 ## Naked Crate
 
+The configuration for Crate is provided via the `crate.yml` (see `arm-templates/ppa/crate.yml`).
 
-count.sh
+Starting and stopping Crate, as well as all other system enhancements are done using good old `dsh`.
+
+We've created a dsh group for each resource group and one for all hosts of all scaleunit hosts so you can perform commands either in single scale units or across all of them.
+
+### Examples
+
+Restarting all Crate instances:
+
+```console
+dsh -g all -c -F 50 "sudo systemctl restart crate"
+```
+
+or tailing the logs of the Crate master nodes:
+
+```console
+dsh -g crate-masters -c "sudo journalctl -f -u crate"
+```
+
+
+## Counting Nodes
+
+
+
+`count.sh`:
+
+```bash
 #!/bin/bash -e
-curl -sXPOST '127.0.0.1:4200/_sql?pretty' -d '{"stmt":"select count(*) as num_nodes from sys.nodes"}'
+curl -sXPOST '127.0.0.1:4200/_sql?pretty' -d@- <<- EOF
+{
+  "stmt": "select count(*) as num_nodes, count(os['available_processors']) as num_cores from sys.nodes"
+}
+EOF
+```
 
+```console
 watch -n 10 "/bin/bash count.sh"
+```
+
 
