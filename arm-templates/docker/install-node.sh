@@ -42,7 +42,7 @@ echo "Defaults:azureuser !requiretty" >> /etc/sudoers
 apt-get install -y htop iotop iptraf ganglia-monitor ganglia-monitor-python
 
 # ganglia
-wget -O /etc/ganglia/gmond.conf https://raw.githubusercontent.com/ne-msft/p-azure/master/arm-templates/ganglia/gmond-crate-node.conf
+wget -O /etc/ganglia/gmond.conf https://raw.githubusercontent.com/crate/p-azure/master/arm-templates/ganglia/gmond-crate-node.conf
 # replace _HOSTNAME_ with real hostname
 sed -i "s/_HOSTNAME_/$(hostname)/g" /etc/ganglia/gmond.conf
 sed -i "s/_SERVER_/10.0.0.99/g" /etc/ganglia/gmond.conf

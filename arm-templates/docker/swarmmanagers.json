@@ -46,7 +46,8 @@
       "-advertise 10.0.0.6 -retry-join 10.0.0.4 -retry-join 10.0.0.5"
     ],
     "scripts": [
-      "https://raw.githubusercontent.com/ne-msft/p-azure/master/arm-templates/docker/install-node.sh"
+      "https://gist.githubusercontent.com/chaudum/c889c2ccbf85108a7069/raw/b5b29d985eef08601f3645b0cc22b3163b3c7e35/install-node.sh",
+      "https://gist.githubusercontent.com/chaudum/a265568eb50eef001ef8/raw/c8e7f97f57847c6c8abed8c383b7623bfa59c080/autopart.sh"
     ]
   },
   "resources": [
@@ -143,7 +144,19 @@
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
-          }
+          },
+          "dataDisks": [
+            {
+              "name": "datadisk0",
+              "diskSizeGB": "1023",
+              "lun": 0,
+              "caching": "ReadOnly",
+              "createOption": "Empty",
+              "vhd": {
+                "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/', variables('vmStorageAccountDataContainerName'), '/master-', copyIndex(1), '-datadisk0.vhd')]"
+              }
+            }
+          ]
         },
         "networkProfile": {
           "networkInterfaces": [

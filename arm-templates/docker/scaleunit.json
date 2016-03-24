@@ -58,9 +58,11 @@
     "storageAccountType": "Standard_LRS",
     "vmStorageAccountContainerName": "vhds",
     "vmBlobContainerName": "data",
+    "dataDiskSize": "1023",
     "sshKeyPath": "[concat('/home/', variables('adminUsername'), '/.ssh/authorized_keys')]",
     "scripts": [
-      "https://raw.githubusercontent.com/ne-msft/p-azure/master/arm-templates/docker/install-node.sh"
+      "https://raw.githubusercontent.com/crate/p-azure/master/arm-templates/docker/install-node.sh",
+      "https://raw.githubusercontent.com/crate/p-azure/master/arm-templates/autopart.sh"
     ]
   },
   "resources": [
@@ -155,7 +157,19 @@
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
-          }
+          },
+          "dataDisks": [
+            {
+              "name": "datadisk0",
+              "diskSizeGB": "[variables('dataDiskSize')]",
+              "lun": 0,
+              "caching": "ReadOnly",
+              "createOption": "Empty",
+              "vhd": {
+                "Uri": "[concat('http://', variables('storageAccountName'), string(mod(copyIndex(1), parameters('storageAccountCount'))),  '.blob.core.windows.net/',variables('vmBlobContainerName'), '/node-', copyIndex(1), 'dataDisk0.vhd')]"
+              }
+            }
+          ]
         },
         "networkProfile": {
           "networkInterfaces": [
